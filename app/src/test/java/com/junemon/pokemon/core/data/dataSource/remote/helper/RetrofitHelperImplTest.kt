@@ -29,18 +29,18 @@ class RetrofitHelperImplTest {
 
     @Test
     fun `SafeApiCalls should return Success`() = runTest {
-        //given
+        // given
         val response = Response.success(
             200,
             DUMMY_POKEMON_MAIN_RESPONSE
         )
         coEvery { api.getMainPokemon() } returns response
-        //when
+        // when
         val result = sut.safeApiCalls { api.getMainPokemon() }
 
         coVerify(exactly = 1) { api.getMainPokemon() }
 
-        //then
+        // then
         Assert.assertEquals(
             ApiResult.Success(DUMMY_POKEMON_MAIN_RESPONSE),
             result
@@ -50,39 +50,40 @@ class RetrofitHelperImplTest {
     @Test
     fun `SafeApiCalls should return Error because of null body`() =
         runTest {
-            //given
+            // given
             val response = Response.success<PokemonMainResponse>(
-                200, null
+                200,
+                null
             )
             coEvery { api.getMainPokemon() } returns response
 
-            //when
+            // when
             val result = sut.safeApiCalls { api.getMainPokemon() }
 
             coVerify(exactly = 1) { api.getMainPokemon() }
 
-            //then
+            // then
             Assert.assertEquals(
                 ApiResult.Error(
                     message = "Response body is empty",
                     code = 200
-                ), result
+                ),
+                result
             )
         }
 
     @Test
     fun `SafeApiCalls should return Error because of Exception`() =
         runTest {
-            //given
+            // given
             coEvery { api.getMainPokemon() } throws IOException()
 
-            //when
+            // when
             val result = sut.safeApiCalls { api.getMainPokemon() }
 
             coVerify(exactly = 1) { api.getMainPokemon() }
 
-            //then
+            // then
             Assert.assertEquals(ApiResult.Error("Cek koneksi internet kamu"), result)
         }
-
 }

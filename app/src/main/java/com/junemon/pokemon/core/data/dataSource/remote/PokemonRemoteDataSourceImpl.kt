@@ -20,25 +20,23 @@ class PokemonRemoteDataSourceImpl @Inject constructor(
             is ApiResult.Error -> DataSourceResult.Error("Error ${response.code} ${response.message}")
             is ApiResult.Success -> if (response.data.pokemonResults.isEmpty()) {
                 DataSourceResult.Error("No data available")
-            } else DataSourceResult.Data(response.data.pokemonResults)
+            } else {
+                DataSourceResult.Data(response.data.pokemonResults)
+            }
         }
     }
-
 
     override suspend fun getDetailPokemon(url: String): PokemonDetailResponse {
         return api.getPokemon(url)
     }
 
-
     override suspend fun getDetailPokemonDirectByName(name: String): PokemonDetailResponse {
         return api.getPokemonDirectByName(name)
     }
 
-
     override suspend fun getPokemonEggGroup(url: String): List<ItemPokemonEggResponse> {
         return api.getPokemonEggGroup(url).eggGroupSpecies
     }
-
 
     override suspend fun getPokemonEvolution(url: String): EvolvingPokemon {
         return api.getPokemonEvolution(url).evolutionChain.evolveTo.first().evolvingPokemonSpecies
@@ -60,7 +58,9 @@ class PokemonRemoteDataSourceImpl @Inject constructor(
             is ApiResult.Success -> {
                 if (response.data.isNotEmpty()) {
                     DataSourceResult.Data(response.data.map { it.area.name })
-                } else DataSourceResult.Error("No data available")
+                } else {
+                    DataSourceResult.Error("No data available")
+                }
             }
         }
     }

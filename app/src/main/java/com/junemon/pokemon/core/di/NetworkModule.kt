@@ -1,6 +1,7 @@
 package com.junemon.pokemon.core.di
 
 import android.content.Context
+import com.junemon.pokemon.BuildConfig
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.NetworkConstant
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.NetworkConstant.BASE_URL
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.PokemonApi
@@ -39,9 +40,11 @@ object NetworkModule {
         .writeTimeout(30L, TimeUnit.SECONDS)
         .readTimeout(30L, TimeUnit.SECONDS)
         .cache(cache)
-        .addInterceptor(HttpLoggingInterceptor().apply {
-            if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
-        })
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+            }
+        )
         .addInterceptor { chain ->
             with(chain) {
                 proceed(this.request().newBuilder().build())

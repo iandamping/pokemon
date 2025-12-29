@@ -2,7 +2,6 @@ package com.junemon.pokemon.core.data.dataSource.remote.response
 
 import com.squareup.moshi.Json
 
-
 /**
  * Created by Ian Damping on 08,May,2021
  * Github https://github.com/iandamping
@@ -19,4 +18,3 @@ data class PokemonSpritesResponse(
 data class PokemonSpritesOtherResponse(@Json(name = "official-artwork") val other: PokemonOfficialArtworkResponse)
 
 data class PokemonOfficialArtworkResponse(@Json(name = "front_default") val image: String)
-

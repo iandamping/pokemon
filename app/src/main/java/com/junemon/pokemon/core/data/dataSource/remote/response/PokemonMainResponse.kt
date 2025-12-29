@@ -1,6 +1,5 @@
 package com.junemon.pokemon.core.data.dataSource.remote.response
 
-import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonResultsResponse
 import com.squareup.moshi.Json
 
 /**
@@ -11,4 +10,3 @@ import com.squareup.moshi.Json
 data class PokemonMainResponse(
     @Json(name = "results") val pokemonResults: List<PokemonResultsResponse>
 )
-
