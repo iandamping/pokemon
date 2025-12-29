@@ -17,37 +17,55 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Penting untuk reviewdog menghitung diff
 
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-          # Cache Gradle untuk mempercepat build selanjutnya
           cache: 'gradle'
 
+      # Perbaikan 1: Cek lokasi gradlew sebelum chmod
       - name: Make gradlew executable
-        run: chmod +x gradlew
+        run: |
+          if [ -f "gradlew" ]; then
+            chmod +x gradlew
+          else
+            echo "Gradlew not found in root, searching in subdirectories..."
+            find . -name "gradlew" -exec chmod +x {} +
+          fi
 
+      # Perbaikan 2: Jalankan detekt dengan fleksibilitas path
       - name: Run Detekt via Gradle
-        # Kita gunakan --continue agar jika ada error di satu modul,
-        # modul lain tetap dicek dan laporannya lengkap.
-        run: ./gradlew detekt --continue
+        run: |
+          if [ -f "gradlew" ]; then
+            ./gradlew detekt --continue
+          else
+            # Jika project kamu ada di dalam folder (misal folder: 'MyProject')
+            find . -name "gradlew" -exec {} detekt --continue \;
+          fi
 
       - name: Setup Reviewdog
-        # Action ini tetap dijalankan baik Detekt sukses maupun gagal
         if: always()
         uses: reviewdog/action-setup@v1
         with:
           reviewdog_version: latest
 
+      # Perbaikan 3: Cegah EOF dengan cek file XML
       - name: Post Detekt Results to PR
-        # Bagian ini hanya dijalankan jika Detekt menemukan error (failure)
         if: failure()
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 1. Cari semua file detekt.xml (karena project kamu mungkin multi-module)
-          # 2. Gabungkan isi file XML tersebut
-          # 3. Kirim ke reviewdog dengan format checkstyle
-          find . -type f -name "detekt.xml" | xargs cat | reviewdog -f=checkstyle -reporter=github-pr-review -level=warning -diff="git diff FETCH_HEAD"
+          # Cari file XML
+          FILES=$(find . -type f -name "detekt.xml")
+          
+          if [ -z "$FILES" ]; then
+            echo "No detekt.xml reports found. Check if detekt task ran successfully."
+            exit 1
+          else
+            echo "Found reports: $FILES"
+            cat $FILES | reviewdog -f=checkstyle -reporter=github-pr-review -level=warning
+          fi
