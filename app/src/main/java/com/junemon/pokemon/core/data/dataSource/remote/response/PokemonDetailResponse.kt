@@ -1,9 +1,5 @@
 package com.junemon.pokemon.core.data.dataSource.remote.response
 
-import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonBasicStatsResponse
-import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpeciesResultResponse
-import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpritesResponse
-import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonTypesResponse
 import com.squareup.moshi.Json
 
 /**

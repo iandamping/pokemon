@@ -44,15 +44,15 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemon should return success`() = runTest {
-        //given
+        // given
         val response = Response.success(
             DUMMY_POKEMON_MAIN_RESPONSE
         )
         coEvery { api.getMainPokemon() } returns response
-        //when
+        // when
         val results = sut.getPokemon()
 
-        //then
+        // then
         coVerify(exactly = 1) { api.getMainPokemon() }
         Assert.assertEquals(
             DUMMY_POKEMON_MAIN_RESPONSE.pokemonResults,
@@ -65,15 +65,15 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemon should return error because empty data`() = runTest {
-        //given
+        // given
         val response = Response.success(
             PokemonMainResponse(pokemonResults = emptyList())
         )
         coEvery { api.getMainPokemon() } returns response
 
-        //when
+        // when
         val results = sut.getPokemon()
-        //then
+        // then
         coVerify(exactly = 1) { api.getMainPokemon() }
         Assert.assertEquals(
             "No data available",
@@ -83,15 +83,16 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemon should return error from server`() = runTest {
-        //given
+        // given
         val response = Response.error<PokemonMainResponse>(
-            500, "error".toResponseBody()
+            500,
+            "error".toResponseBody()
         )
         coEvery { api.getMainPokemon() } returns response
 
-        //when
+        // when
         val results = sut.getPokemon()
-        //then
+        // then
         coVerify(exactly = 1) { api.getMainPokemon() }
         Assert.assertEquals(
             "Error 500 error",
@@ -101,12 +102,12 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemon should return error from exception`() = runTest {
-        //given
+        // given
         coEvery { api.getMainPokemon() } throws IOException()
 
-        //when
+        // when
         val results = sut.getPokemon()
-        //then
+        // then
         coVerify(exactly = 1) { api.getMainPokemon() }
         Assert.assertEquals(
             "Error null Cek koneksi internet kamu",
@@ -116,17 +117,17 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetDetailPokemonCharacteristic should return success`() = runTest {
-        //given
+        // given
         val response = Response.success(
             DUMMY_POKEMON_CHARACTERISTIC
         )
         coEvery { api.getPokemonCharacteristic(any()) } returns response
-        //when
+        // when
         val results = sut.getDetailPokemonCharacteristic(1)
         val position =
             DUMMY_POKEMON_CHARACTERISTIC.descriptions.indexOfFirst { it.language.name == "en" }
         val expectedData = DUMMY_POKEMON_CHARACTERISTIC.descriptions[position].description
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonCharacteristic(any()) }
         Assert.assertEquals(
             expectedData,
@@ -136,15 +137,16 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetDetailPokemonCharacteristic should return error from server`() = runTest {
-        //given
+        // given
         val response = Response.error<PokemonCharacteristicResponse>(
-            500, "error".toResponseBody()
+            500,
+            "error".toResponseBody()
         )
         coEvery { api.getPokemonCharacteristic(any()) } returns response
-        //when
+        // when
         val results = sut.getDetailPokemonCharacteristic(1)
 
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonCharacteristic(any()) }
         Assert.assertEquals(
             "Error 500 error",
@@ -154,12 +156,12 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetDetailPokemonCharacteristic should return error from exception`() = runTest {
-        //given
+        // given
         coEvery { api.getPokemonCharacteristic(any()) } throws IOException()
-        //when
+        // when
         val results = sut.getDetailPokemonCharacteristic(1)
 
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonCharacteristic(any()) }
         Assert.assertEquals(
             "Error null Cek koneksi internet kamu",
@@ -203,7 +205,8 @@ class PokemonRemoteDataSourceImplTest {
     @Test
     fun `GetPokemonLocationAreas should return error from server`() = runTest {
         val response = Response.error<List<PokemonAreasResponse>>(
-            500, "error".toResponseBody()
+            500,
+            "error".toResponseBody()
         )
         coEvery { api.getPokemonLocationAreas(any()) } returns response
 
@@ -233,14 +236,14 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemonById should return success`() = runTest {
-        //given
+        // given
         val response = Response.success(
             DUMMY_POKEMON_DETAIL
         )
         coEvery { api.getPokemonById(any()) } returns response
-        //when
+        // when
         val result = sut.getPokemonById(1)
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonById(any()) }
         Assert.assertEquals(
             DataSourceResult.Data(DUMMY_POKEMON_DETAIL),
@@ -250,14 +253,15 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemonById should return error from server`() = runTest {
-        //given
+        // given
         val response = Response.error<PokemonDetailResponse>(
-            500, "error".toResponseBody()
+            500,
+            "error".toResponseBody()
         )
         coEvery { api.getPokemonById(any()) } returns response
-        //when
+        // when
         val result = sut.getPokemonById(1)
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonById(any()) }
         Assert.assertEquals(
             "Error 500 error",
@@ -267,11 +271,11 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemonById should return error from exception`() = runTest {
-        //given
+        // given
         coEvery { api.getPokemonById(any()) } throws IOException()
-        //when
+        // when
         val result = sut.getPokemonById(1)
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonById(any()) }
         Assert.assertEquals(
             "Error null Cek koneksi internet kamu",
@@ -281,14 +285,14 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemonByName should return success`() = runTest {
-        //given
+        // given
         val response = Response.success(
             DUMMY_POKEMON_DETAIL
         )
         coEvery { api.getPokemonByName(any()) } returns response
-        //when
+        // when
         val result = sut.getPokemonByName("a")
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonByName(any()) }
         Assert.assertEquals(
             DataSourceResult.Data(DUMMY_POKEMON_DETAIL),
@@ -298,14 +302,15 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemonByName should return error from server`() = runTest {
-        //given
+        // given
         val response = Response.error<PokemonDetailResponse>(
-            500, "error".toResponseBody()
+            500,
+            "error".toResponseBody()
         )
         coEvery { api.getPokemonByName(any()) } returns response
-        //when
+        // when
         val result = sut.getPokemonByName("1")
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonByName(any()) }
         Assert.assertEquals(
             "Error 500 error",
@@ -315,11 +320,11 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetPokemonByName should return error from exception`() = runTest {
-        //given
+        // given
         coEvery { api.getPokemonByName(any()) } throws IOException()
-        //when
+        // when
         val result = sut.getPokemonByName("1")
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonByName(any()) }
         Assert.assertEquals(
             "Error null Cek koneksi internet kamu",
@@ -327,17 +332,16 @@ class PokemonRemoteDataSourceImplTest {
         )
     }
 
-
     @Test
     fun `GetDetailSpeciesPokemon should return success`() = runTest {
-        //given
+        // given
         val response = Response.success(
             DUMMY_POKEMON_SPECIES_DETAIL
         )
         coEvery { api.getPokemonSpecies(any()) } returns response
-        //when
+        // when
         val result = sut.getDetailSpeciesPokemon(1)
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonSpecies(any()) }
         Assert.assertEquals(
             DataSourceResult.Data(DUMMY_POKEMON_SPECIES_DETAIL),
@@ -347,14 +351,15 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetDetailSpeciesPokemon should return error from server`() = runTest {
-        //given
+        // given
         val response = Response.error<PokemonSpeciesDetailResponse>(
-            500, "error".toResponseBody()
+            500,
+            "error".toResponseBody()
         )
         coEvery { api.getPokemonSpecies(any()) } returns response
-        //when
+        // when
         val result = sut.getDetailSpeciesPokemon(1)
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonSpecies(any()) }
         Assert.assertEquals(
             "Error 500 error",
@@ -364,16 +369,15 @@ class PokemonRemoteDataSourceImplTest {
 
     @Test
     fun `GetDetailSpeciesPokemon should return error from exception`() = runTest {
-        //given
+        // given
         coEvery { api.getPokemonSpecies(any()) } throws IOException()
-        //when
+        // when
         val result = sut.getDetailSpeciesPokemon(1)
-        //then
+        // then
         coVerify(exactly = 1) { api.getPokemonSpecies(any()) }
         Assert.assertEquals(
             "Error null Cek koneksi internet kamu",
             (result as DataSourceResult.Error).message
         )
     }
-
 }

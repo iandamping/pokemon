@@ -15,7 +15,8 @@ object DummyPokemon {
     val DUMMY_POKEMON_TYPE_2 = PokemonTypesResponse(DUMMY_POKEMON_SINGLE_TYPE_1)
     val DUMMY_POKEMON_TYPE_3 = PokemonTypesResponse(DUMMY_POKEMON_SINGLE_TYPE_1)
     val DUMMY_LIST_POKEMON_TYPE = listOf(
-        DUMMY_POKEMON_TYPE_1, DUMMY_POKEMON_TYPE_2,
+        DUMMY_POKEMON_TYPE_1,
+        DUMMY_POKEMON_TYPE_2,
         DUMMY_POKEMON_TYPE_3
     )
     val DUMMY_POKEMON_ABILITY_NAME_1 = PokemonAbilitiesNameResponse("a")
@@ -74,7 +75,8 @@ object DummyPokemon {
     val DUMMY_ITEM_POKEMON_CHAR_3 =
         ItemPokemonCharacteristicResponse("a", ItemPokemonCharacteristicLanguageResponse("a", "a"))
     val DUMMY_LIST_ITEM_POKEMON_CHAR = listOf(
-        DUMMY_ITEM_POKEMON_CHAR_1, DUMMY_ITEM_POKEMON_CHAR_2,
+        DUMMY_ITEM_POKEMON_CHAR_1,
+        DUMMY_ITEM_POKEMON_CHAR_2,
         DUMMY_ITEM_POKEMON_CHAR_3
     )
     val DUMMY_POKEMON_CHARACTERISTIC = PokemonCharacteristicResponse(DUMMY_LIST_ITEM_POKEMON_CHAR)
@@ -85,7 +87,8 @@ object DummyPokemon {
     val DUMMY_POKEMON_AREA_2 = PokemonAreasResponse(DUMMY_POKEMON_AREA_NAME_2)
     val DUMMY_POKEMON_AREA_3 = PokemonAreasResponse(DUMMY_POKEMON_AREA_NAME_3)
     val DUMMY_LIST_POKEMON_AREA = listOf(
-        DUMMY_POKEMON_AREA_1, DUMMY_POKEMON_AREA_2,
+        DUMMY_POKEMON_AREA_1,
+        DUMMY_POKEMON_AREA_2,
         DUMMY_POKEMON_AREA_3
     )
 

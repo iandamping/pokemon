@@ -16,7 +16,7 @@ interface PokemonRemoteDataSourceModule {
 
     @Binds
     @Singleton
-    fun bindsRetrofitHelper(impl: RetrofitHelperImpl):RetrofitHelper
+    fun bindsRetrofitHelper(impl: RetrofitHelperImpl): RetrofitHelper
 
     @Binds
     @Singleton
