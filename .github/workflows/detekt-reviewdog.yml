@@ -1,0 +1,29 @@
+name: Detekt Reviewer
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  detekt-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17' # Sesuaikan dengan versi Java di project Android kamu
+          distribution: 'temurin'
+
+      - name: Run Detekt with Reviewdog
+        uses: nakabonne/action-detekt@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review # Ini yang membuat komen muncul di baris kode PR
+          level: warning # Opsi: info, warning, error
+          detekt_config: config/detekt/detekt.yml # Sesuaikan path config kamu
