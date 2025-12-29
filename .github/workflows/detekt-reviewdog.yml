@@ -21,17 +21,33 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17' # Sesuaikan dengan versi Java di project Android kamu
+          java-version: '17'
           distribution: 'temurin'
-      # Langkah opsional tapi penting: pastikan wrapper bisa dieksekusi
+          # Cache Gradle untuk mempercepat build selanjutnya
+          cache: 'gradle'
+
       - name: Make gradlew executable
         run: chmod +x gradlew
 
-      - name: Run Detekt with Reviewdog
-        uses: reviewdog/action-detekt@v1
+      - name: Run Detekt via Gradle
+        # Kita gunakan --continue agar jika ada error di satu modul,
+        # modul lain tetap dicek dan laporannya lengkap.
+        run: ./gradlew detekt --continue
+
+      - name: Setup Reviewdog
+        # Action ini tetap dijalankan baik Detekt sukses maupun gagal
+        if: always()
+        uses: reviewdog/action-setup@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review # Ini yang membuat komen muncul di baris kode PR
-          level: warning # Opsi: info, warning, error
-          detekt_config: config/detekt/detekt.yml # Sesuaikan path config kamu
-          fail_on_error: true
+          reviewdog_version: latest
+
+      - name: Post Detekt Results to PR
+        # Bagian ini hanya dijalankan jika Detekt menemukan error (failure)
+        if: failure()
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 1. Cari semua file detekt.xml (karena project kamu mungkin multi-module)
+          # 2. Gabungkan isi file XML tersebut
+          # 3. Kirim ke reviewdog dengan format checkstyle
+          find . -type f -name "detekt.xml" | xargs cat | reviewdog -f=checkstyle -reporter=github-pr-review -level=warning -diff="git diff FETCH_HEAD"
