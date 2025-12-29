@@ -25,7 +25,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Detekt with Reviewdog
-        uses: nakabonne/action-detekt@v1
+        uses: reviewdog/action-detekt@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review # Ini yang membuat komen muncul di baris kode PR
