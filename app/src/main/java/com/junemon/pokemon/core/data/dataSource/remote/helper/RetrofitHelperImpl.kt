@@ -39,8 +39,9 @@ class RetrofitHelperImpl @Inject constructor(@IoDispatcher private val ioDispatc
                         )
                     }
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                if (e is CancellationException) throw e
                 when (e) {
                     is SocketTimeoutException -> ApiResult.Error("Waktu koneksi habis (Timeout)")
                     is IOException -> ApiResult.Error("Cek koneksi internet kamu")

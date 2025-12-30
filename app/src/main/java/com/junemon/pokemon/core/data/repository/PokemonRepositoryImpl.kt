@@ -41,8 +41,9 @@ class PokemonRepositoryImpl @Inject constructor(
                     } else {
                         DomainResult.Data(data)
                     }
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (e: Exception) {
-                    if (e is CancellationException) throw e
                     when (e) {
                         is SocketTimeoutException -> DomainResult.Error("Waktu koneksi habis (Timeout)")
                         is IOException -> DomainResult.Error("Cek koneksi internet kamu")
@@ -67,8 +68,9 @@ class PokemonRepositoryImpl @Inject constructor(
 
                 is DataSourceResult.Data -> DomainResult.Data(getPokemonFromRemote.data.mapToDetail())
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            if (e is CancellationException) throw e
             when (e) {
                 is SocketTimeoutException -> DomainResult.Error("Waktu koneksi habis (Timeout)")
                 is IOException -> DomainResult.Error("Cek koneksi internet kamu")
@@ -96,8 +98,9 @@ class PokemonRepositoryImpl @Inject constructor(
             } else {
                 DomainResult.Error(EMPTY_DATA)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            if (e is CancellationException) throw e
             when (e) {
                 is SocketTimeoutException -> DomainResult.Error("Waktu koneksi habis (Timeout)")
                 is IOException -> DomainResult.Error("Cek koneksi internet kamu")
