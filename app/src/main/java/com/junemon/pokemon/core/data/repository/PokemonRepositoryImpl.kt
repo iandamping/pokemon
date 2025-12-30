@@ -8,6 +8,7 @@ import com.junemon.pokemon.core.data.repository.model.PokemonDetail
 import com.junemon.pokemon.core.data.repository.model.PokemonDetailSpecies
 import com.junemon.pokemon.core.data.repository.model.mapToDetail
 import com.junemon.pokemon.core.data.repository.model.mapToSpeciesDetail
+import com.junemon.pokemon.core.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -15,7 +16,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
-    private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val remoteData: PokemonRemoteDataSource
 ) :
     PokemonRepository {
