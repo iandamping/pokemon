@@ -1,6 +1,5 @@
 package com.junemon.pokemon.core.data.dataSource.remote
 
-import com.example.juaraandroid_pokemonapp.core.data.datasource.remote.RetrofitHelperImpl
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_LIST_POKEMON_AREA
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_POKEMON_CHARACTERISTIC
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_POKEMON_DETAIL
@@ -10,6 +9,7 @@ import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_URL_PO
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_URL_POKEMON_RESULTS_2
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_URL_POKEMON_RESULTS_3
 import com.junemon.pokemon.core.data.dataSource.remote.helper.RetrofitHelper
+import com.junemon.pokemon.core.data.dataSource.remote.helper.RetrofitHelperImpl
 import com.junemon.pokemon.core.data.dataSource.remote.response.DataSourceResult
 import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonAreasResponse
 import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonCharacteristicResponse

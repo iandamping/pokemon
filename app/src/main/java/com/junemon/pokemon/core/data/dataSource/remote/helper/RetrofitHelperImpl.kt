@@ -1,7 +1,6 @@
-package com.example.juaraandroid_pokemonapp.core.data.datasource.remote
+package com.junemon.pokemon.core.data.dataSource.remote.helper
 
-import com.junemon.pokemon.core.data.dataSource.remote.helper.ApiResult
-import com.junemon.pokemon.core.data.dataSource.remote.helper.RetrofitHelper
+import com.junemon.pokemon.core.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.Response
@@ -14,7 +13,7 @@ import javax.inject.Inject
  * Github https://github.com/iandamping
  * Indonesia.
  */
-class RetrofitHelperImpl @Inject constructor(private val ioDispatcher: CoroutineDispatcher) :
+class RetrofitHelperImpl @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher) :
     RetrofitHelper {
     override suspend fun <T> safeApiCalls(call: suspend () -> Response<T>): ApiResult<T> {
         return withContext(ioDispatcher) {

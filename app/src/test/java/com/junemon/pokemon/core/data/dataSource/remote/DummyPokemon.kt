@@ -1,6 +1,37 @@
 package com.junemon.pokemon.core.data.dataSource.remote
 
-import com.junemon.pokemon.core.data.dataSource.remote.response.*
+import com.junemon.pokemon.core.data.dataSource.remote.response.EvolvingPokemon
+import com.junemon.pokemon.core.data.dataSource.remote.response.ItemEvolveToResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.ItemPokemonCharacteristicLanguageResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.ItemPokemonCharacteristicResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.ItemPokemonEggResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.ItemPokemonEvolutionChainResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonAbilitiesNameResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonAbilitiesResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonAreasName
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonAreasResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonBasicStatsResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonCharacteristicResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonDetailResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonEggGroupResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonEvolutionResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonGenerationResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonGrowthRateResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonHabitatResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonMainResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonOfficialArtworkResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonResultsResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonShapeResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpeciesColorResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpeciesDetailResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpeciesEggGroupResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpeciesEvolutionResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpeciesResultResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpritesOtherResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonSpritesResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonStatNameResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonTypeSingleResponse
+import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonTypesResponse
 
 object DummyPokemon {
     val DUMMY_URL_POKEMON_RESULTS_1 = PokemonResultsResponse("a")

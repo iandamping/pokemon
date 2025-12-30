@@ -1,9 +1,9 @@
 package com.junemon.pokemon.core.di
 
-import com.example.juaraandroid_pokemonapp.core.data.datasource.remote.RetrofitHelperImpl
 import com.junemon.pokemon.core.data.dataSource.remote.PokemonRemoteDataSource
 import com.junemon.pokemon.core.data.dataSource.remote.PokemonRemoteDataSourceImpl
 import com.junemon.pokemon.core.data.dataSource.remote.helper.RetrofitHelper
+import com.junemon.pokemon.core.data.dataSource.remote.helper.RetrofitHelperImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

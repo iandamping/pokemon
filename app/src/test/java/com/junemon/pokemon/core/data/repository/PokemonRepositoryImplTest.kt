@@ -36,9 +36,7 @@ class PokemonRepositoryImplTest {
 
     @Test
     fun `GetPokemon should return success`() = runTest {
-        val getPokemonResult =
-            (DataSourceResult.Data(DUMMY_POKEMON_MAIN_RESPONSE.pokemonResults) as DataSourceResult<List<PokemonResultsResponse>>)
-        coEvery { remoteData.getPokemon() } returns getPokemonResult
+        coEvery { remoteData.getPokemon() } returns DataSourceResult.Data(DUMMY_POKEMON_MAIN_RESPONSE.pokemonResults)
         coEvery { remoteData.getDetailPokemon(any()) } returns DUMMY_POKEMON_DETAIL
 
         val results = sut.getPokemon()
@@ -101,7 +99,9 @@ class PokemonRepositoryImplTest {
 
     @Test
     fun `GetEvolvingPokemon should return success`() = runTest {
-        coEvery { remoteData.getPokemonEvolution(any()) } returns DummyPokemon.DUMMY_POKEMON_EVOLUTION.evolutionChain.evolveTo.first().evolvingPokemonSpecies
+        coEvery {
+            remoteData.getPokemonEvolution(any())
+        } returns DummyPokemon.DUMMY_POKEMON_EVOLUTION.evolutionChain.evolveTo.first().evolvingPokemonSpecies
         coEvery { remoteData.getPokemonByName(any()) } returns DataSourceResult.Data(
             DUMMY_POKEMON_DETAIL
         )

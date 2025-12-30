@@ -1,6 +1,5 @@
 package com.junemon.pokemon.core.data.dataSource.remote.helper
 
-import com.example.juaraandroid_pokemonapp.core.data.datasource.remote.RetrofitHelperImpl
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_POKEMON_MAIN_RESPONSE
 import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonMainResponse
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.PokemonApi
