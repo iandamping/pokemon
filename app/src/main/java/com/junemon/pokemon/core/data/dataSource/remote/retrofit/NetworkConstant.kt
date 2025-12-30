@@ -19,5 +19,5 @@ object NetworkConstant {
     const val NETWORK_PAGE_SIZE = 2
     const val RESPONSE_BODY_NULL = "Response body null"
     const val SERVER_ERROR = "Could not connect to server"
-    const val DEFAULT_ERROR = "Application encounter unknown problem : "
+    const val DEFAULT_ERROR = "Application encounter problem : "
 }
