@@ -8,19 +8,22 @@ import com.junemon.pokemon.core.data.repository.model.PokemonDetail
 import com.junemon.pokemon.core.data.repository.model.PokemonDetailSpecies
 import com.junemon.pokemon.core.data.repository.model.mapToDetail
 import com.junemon.pokemon.core.data.repository.model.mapToSpeciesDetail
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class PokemonRepositoryImpl @Inject constructor(private val remoteData: PokemonRemoteDataSource) :
+class PokemonRepositoryImpl @Inject constructor(
+    private val ioDispatcher: CoroutineDispatcher,
+    private val remoteData: PokemonRemoteDataSource
+) :
     PokemonRepository {
     override suspend fun getPokemon(): DomainResult<List<PokemonDetail>> {
         return when (val result = remoteData.getPokemon()) {
             is DataSourceResult.Data -> {
                 try {
-                    val data = withContext(Dispatchers.Default) {
+                    val data = withContext(ioDispatcher) {
                         result.data.map { singleItem ->
                             async {
                                 remoteData.getDetailPokemon(singleItem.pokemonUrl).mapToDetail()
@@ -64,7 +67,7 @@ class PokemonRepositoryImpl @Inject constructor(private val remoteData: PokemonR
             val remoteResultName =
                 remoteData.getPokemonEggGroup(url).shuffled().take(4).map { it.name }
 
-            val getPokemonFromRemote = withContext(Dispatchers.Default) {
+            val getPokemonFromRemote = withContext(ioDispatcher) {
                 remoteResultName.map { singleItem ->
                     async {
                         remoteData.getDetailPokemonDirectByName(singleItem)
