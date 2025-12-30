@@ -13,8 +13,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.net.SocketTimeoutException
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
+@Suppress("TooGenericExceptionCaught")
 class PokemonRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val remoteData: PokemonRemoteDataSource
@@ -38,7 +42,12 @@ class PokemonRepositoryImpl @Inject constructor(
                         DomainResult.Data(data)
                     }
                 } catch (e: Exception) {
-                    DomainResult.Error(e.message ?: EMPTY_DATA)
+                    if (e is CancellationException) throw e
+                    when (e) {
+                        is SocketTimeoutException -> DomainResult.Error("Waktu koneksi habis (Timeout)")
+                        is IOException -> DomainResult.Error("Cek koneksi internet kamu")
+                        else -> DomainResult.Error("Terjadi kesalahan: ${e.localizedMessage}")
+                    }
                 }
             }
 
@@ -59,7 +68,12 @@ class PokemonRepositoryImpl @Inject constructor(
                 is DataSourceResult.Data -> DomainResult.Data(getPokemonFromRemote.data.mapToDetail())
             }
         } catch (e: Exception) {
-            DomainResult.Error(e.message ?: EMPTY_DATA)
+            if (e is CancellationException) throw e
+            when (e) {
+                is SocketTimeoutException -> DomainResult.Error("Waktu koneksi habis (Timeout)")
+                is IOException -> DomainResult.Error("Cek koneksi internet kamu")
+                else -> DomainResult.Error("Terjadi kesalahan: ${e.localizedMessage}")
+            }
         }
     }
 
@@ -83,7 +97,12 @@ class PokemonRepositoryImpl @Inject constructor(
                 DomainResult.Error(EMPTY_DATA)
             }
         } catch (e: Exception) {
-            DomainResult.Error(e.message ?: EMPTY_DATA)
+            if (e is CancellationException) throw e
+            when (e) {
+                is SocketTimeoutException -> DomainResult.Error("Waktu koneksi habis (Timeout)")
+                is IOException -> DomainResult.Error("Cek koneksi internet kamu")
+                else -> DomainResult.Error("Terjadi kesalahan: ${e.localizedMessage}")
+            }
         }
     }
 

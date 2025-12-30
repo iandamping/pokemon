@@ -127,7 +127,7 @@ class PokemonRepositoryImplTest {
         coVerify(exactly = 0) { remoteData.getPokemonByName(any()) }
 
         Assert.assertEquals(
-            EMPTY_DATA,
+            "Cek koneksi internet kamu",
             (results as DomainResult.Error).message
         )
     }
@@ -173,7 +173,7 @@ class PokemonRepositoryImplTest {
         coVerify(exactly = 1) { remoteData.getPokemonEggGroup(any()) }
 
         Assert.assertEquals(
-            EMPTY_DATA,
+            "Cek koneksi internet kamu",
             (results as DomainResult.Error).message
         )
     }
@@ -188,7 +188,7 @@ class PokemonRepositoryImplTest {
         coVerify(exactly = 1) { remoteData.getPokemonEggGroup(any()) }
 
         Assert.assertEquals(
-            EMPTY_DATA,
+            "Cek koneksi internet kamu",
             (results as DomainResult.Error).message
         )
     }

@@ -7,12 +7,15 @@ import retrofit2.Response
 import java.io.IOException
 import java.net.SocketTimeoutException
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Created by Ian Damping on 07,May,2021
  * Github https://github.com/iandamping
  * Indonesia.
  */
+
+@Suppress("TooGenericExceptionCaught")
 class RetrofitHelperImpl @Inject constructor(@IoDispatcher private val ioDispatcher: CoroutineDispatcher) :
     RetrofitHelper {
     override suspend fun <T> safeApiCalls(call: suspend () -> Response<T>): ApiResult<T> {
@@ -37,6 +40,7 @@ class RetrofitHelperImpl @Inject constructor(@IoDispatcher private val ioDispatc
                     }
                 }
             } catch (e: Exception) {
+                if (e is CancellationException) throw e
                 when (e) {
                     is SocketTimeoutException -> ApiResult.Error("Waktu koneksi habis (Timeout)")
                     is IOException -> ApiResult.Error("Cek koneksi internet kamu")
