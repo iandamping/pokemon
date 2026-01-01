@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.ui.text.google.fonts)
     //network
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
@@ -83,7 +84,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
     //detekt additional rules
-//    detektPlugins(libs.detekt)
     detektPlugins(libs.detekt.rules.compose)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
