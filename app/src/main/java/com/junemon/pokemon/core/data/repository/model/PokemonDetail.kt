@@ -11,21 +11,13 @@ data class PokemonDetail(
     val pokemonWeight: Int,
     val pokemonHeight: Int,
     val pokemonImage: String,
-    val pokemonAbility1: String,
-    val pokemonAbility2: String,
-    val pokemonSmallImage1: String,
-    val pokemonSmallImage2: String,
-    val pokemonSmallImage3: String,
-    val pokemonSmallImage4: String,
-    val pokemonStat0: PokemonStat,
-    val pokemonStat1: PokemonStat,
-    val pokemonStat2: PokemonStat,
-    val pokemonStat3: PokemonStat,
-    val pokemonStat4: PokemonStat,
-    val pokemonStat5: PokemonStat,
-    val pokemonType0: String,
-    val pokemonType1: String,
+    val pokemonAbilities: List<String>,
+    val pokemonSmallImages: List<String?>,
+    val pokemonStats: List<PokemonStat>,
+    val pokemonTypes: List<String>,
     val pokemonSpeciesUrl: String
 )
 
 data class PokemonStat(val point: Int, val name: String)
+
+data class PokemonSmallImage(val image: String)

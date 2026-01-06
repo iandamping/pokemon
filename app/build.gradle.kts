@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.androidx.material.icons.core)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.ui.text.google.fonts)
+    // compose constraint
+    implementation(libs.androidx.constraintlayout.compose)
     //network
     implementation(libs.retrofit)
     implementation(libs.logging.interceptor)
@@ -71,6 +73,7 @@ dependencies {
     implementation(libs.moshi.kotlin)
     //coil
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
     //logger
     implementation(libs.timber)
     //db
@@ -85,6 +88,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     //detekt additional rules
     detektPlugins(libs.detekt.rules.compose)
+    //lottie
+    implementation(libs.lottie.compose)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
