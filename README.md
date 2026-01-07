@@ -4,10 +4,12 @@ This repository is a modern Android development lab focused on implementing Decl
 
 ### Tech stack
 * UI: Jetpack Compose (Material 3).
+* Extract Color: Palette
 * Architecture: MVVM with Clean Architecture.
 * Dependency Injection: Hilt.
 * Networking: Retrofit with OkHTTP & Moshi.
 * Local Database: Room.
+* Unit-testing: Mockk.
 
 ### Code Quality Assurance:
 * Detekt: Used for static code analysis to ensure compliance with Kotlin coding standards.
