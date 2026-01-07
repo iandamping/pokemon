@@ -25,36 +25,44 @@ fun PokemonDetailResponse.mapToDetail(): PokemonDetail = PokemonDetail(
         }
     } ?: "No data available",
     pokemonImage = pokemonImage?.sprites?.other?.image ?: "No data available",
-    pokemonSmallImage1 = pokemonImage?.smallImage1 ?: "No data available",
-    pokemonSmallImage2 = pokemonImage?.smallImage2 ?: "No data available",
-    pokemonSmallImage3 = pokemonImage?.smallImage3 ?: "No data available",
-    pokemonSmallImage4 = pokemonImage?.smallImage4 ?: "No data available",
-    pokemonStat0 = pokemonStats[0].mapToDetail(),
-    pokemonStat1 = pokemonStats[1].mapToDetail(),
-    pokemonStat2 = pokemonStats[2].mapToDetail(),
-    pokemonStat3 = pokemonStats[3].mapToDetail(),
-    pokemonStat4 = pokemonStats[4].mapToDetail(),
-    pokemonStat5 = pokemonStats[5].mapToDetail(),
-    pokemonType0 = pokemonTypes[0].type.typeName.replaceFirstChar { firstChar ->
-        if (firstChar.isLowerCase()) {
-            firstChar.titlecase(
-                Locale.getDefault()
-            )
-        } else {
-            firstChar.toString()
-        }
-    },
-    pokemonType1 = pokemonTypes.checkTypeList(1, 1),
-    pokemonAbility1 = pokemonAbilities[0].abilities.abilityName.replaceFirstChar { firstChar ->
-        if (firstChar.isLowerCase()) {
-            firstChar.titlecase(
-                Locale.getDefault()
-            )
-        } else {
-            firstChar.toString()
-        }
-    },
-    pokemonAbility2 = pokemonAbilities.checkAbilitiesList(1, 1),
+    pokemonSmallImages = listOf(
+        pokemonImage?.smallImage1,
+        pokemonImage?.smallImage2,
+        pokemonImage?.smallImage3,
+        pokemonImage?.smallImage4
+    ),
+    pokemonStats = listOf(
+        pokemonStats[0].mapToDetail(),
+        pokemonStats[1].mapToDetail(),
+        pokemonStats[2].mapToDetail(),
+        pokemonStats[3].mapToDetail(),
+        pokemonStats[4].mapToDetail(),
+        pokemonStats[5].mapToDetail(),
+    ),
+    pokemonTypes = listOf(
+        pokemonTypes[0].type.typeName.replaceFirstChar { firstChar ->
+            if (firstChar.isLowerCase()) {
+                firstChar.titlecase(
+                    Locale.getDefault()
+                )
+            } else {
+                firstChar.toString()
+            }
+        },
+        pokemonTypes.checkTypeList(1, 1)
+    ),
+    pokemonAbilities = listOf(
+        pokemonAbilities[0].abilities.abilityName.replaceFirstChar { firstChar ->
+            if (firstChar.isLowerCase()) {
+                firstChar.titlecase(
+                    Locale.getDefault()
+                )
+            } else {
+                firstChar.toString()
+            }
+        },
+        pokemonAbilities.checkAbilitiesList(1, 1)
+    ),
     pokemonSpeciesUrl = pokemonSpecies?.speciesUrl ?: "No data available"
 )
 
