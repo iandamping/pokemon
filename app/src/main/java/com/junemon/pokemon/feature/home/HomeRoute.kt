@@ -12,5 +12,13 @@ fun HomeRoute(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val pokemonDetails by homeViewModel.pokemonDetails.collectAsStateWithLifecycle()
-    HomeScreen(modifier = modifier, uiState = pokemonDetails)
+    val pokemonColors by homeViewModel.pokemonColors.collectAsStateWithLifecycle()
+    HomeScreen(
+        modifier = modifier,
+        uiState = pokemonDetails,
+        dynamicCardColor = pokemonColors,
+        onProcessImageWithId = { pokemonId, image ->
+            homeViewModel.updatePokemonColor(pokemonId = pokemonId, image = image)
+        }
+    )
 }

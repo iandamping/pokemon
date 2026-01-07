@@ -1,61 +1,80 @@
 package com.junemon.pokemon.feature.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import coil3.Image
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import coil3.request.allowHardware
 import coil3.request.crossfade
-import coil3.size.Precision
-import coil3.size.Scale
 import com.junemon.pokemon.R
 import com.junemon.pokemon.core.data.repository.model.PokemonDetail
+import com.junemon.pokemon.ui.theme.Pink40
+import com.junemon.pokemon.ui.theme.Pink80
+import com.junemon.pokemon.ui.theme.Purple40
+import com.junemon.pokemon.ui.theme.Purple80
+import com.junemon.pokemon.ui.theme.PurpleGrey40
+import com.junemon.pokemon.ui.theme.PurpleGrey80
 import com.junemon.pokemon.util.PokemonConstant.ONE_TYPE_MONS
-import timber.log.Timber
 
 @Composable
 fun ItemPokemonScreen(
     data: PokemonDetail,
+    dynamicCardColor: Map<Int, Color>,
     modifier: Modifier = Modifier,
+    onProcessImageWithId: (Int, Image) -> Unit,
     onSelectedPokemon: (Int) -> Unit
 ) {
+    val progressIndicatorColors: List<Color> =
+        listOf(Purple80, PurpleGrey80, Pink80, Purple40, PurpleGrey40, Pink40)
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable { onSelectedPokemon(data.pokemonId) },
+        colors = CardDefaults.cardColors(
+            containerColor = dynamicCardColor[data.pokemonId]?.copy(alpha = 0.2f)
+                ?.compositeOver(Color.White)
+                ?: MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
+                    .compositeOver(Color.White)
+        ),
         elevation = CardDefaults.cardElevation(4.dp),
     ) {
         ConstraintLayout(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxSize()
+                .background(Color.Transparent)
         ) {
             val (titleRef, imageRef, divider) = createRefs()
             val (statRef, typeRef) = createRefs()
@@ -72,21 +91,18 @@ fun ItemPokemonScreen(
                 pokemonStatPoint = data.pokemonStats.first().point
             )
 
-            AsyncImage(
+            ItemPokemonMainImages(
                 modifier = Modifier.constrainAs(imageRef) {
                     top.linkTo(titleRef.bottom, 8.dp)
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
-
                     width = Dimension.fillToConstraints
                     height = Dimension.value(150.dp)
                 },
-                model = ImageRequest.Builder(LocalContext.current).data(data.pokemonImage)
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(id = R.drawable.placeholder_image),
-                error = painterResource(id = R.drawable.ic_no_data),
-                contentDescription = stringResource(R.string.pokemon_image)
+                imageUrl = data.pokemonImage,
+                onFetchImage = { image ->
+                    onProcessImageWithId(data.pokemonId, image)
+                }
             )
 
             HorizontalDivider(
@@ -110,7 +126,6 @@ fun ItemPokemonScreen(
             ) {
                 data.pokemonTypes.forEach { type ->
                     if (type != ONE_TYPE_MONS) {
-                        Timber.e(type)
                         Row {
                             Text(type)
                         }
@@ -127,11 +142,12 @@ fun ItemPokemonScreen(
                 },
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                data.pokemonStats.forEach { stat ->
+                data.pokemonStats.forEachIndexed { index, stat ->
                     ItemPokemonStat(
                         modifier = Modifier.fillMaxWidth(),
                         statName = stat.name,
-                        statPoint = stat.point
+                        statPoint = stat.point,
+                        selectedColor = progressIndicatorColors[index]
                     )
                 }
             }
@@ -161,7 +177,7 @@ private fun ItemPokemonTitle(
         Text(
             text = "$pokemonStat $pokemonStatPoint",
             style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Black
             )
         )
     }
@@ -171,46 +187,58 @@ private fun ItemPokemonTitle(
 private fun ItemPokemonStat(
     statName: String,
     statPoint: Int,
+    selectedColor: Color,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier.padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = statName,
-            style = MaterialTheme.typography.titleSmall.copy(
-                fontWeight = FontWeight.Bold
-            )
+            modifier = Modifier.weight(0.35f),
+            style = MaterialTheme.typography.labelMedium
+        )
+
+        LinearProgressIndicator(
+            progress = {
+                statPoint.toFloat() / 200F
+            },
+            modifier = Modifier
+                .weight(0.65f)
+                .height(8.dp)
+                .clip(CircleShape),
+            color = selectedColor,
+            trackColor = selectedColor.copy(alpha = 0.2f)
         )
         Text(
             text = statPoint.toString(),
-            style = MaterialTheme.typography.titleSmall.copy(
-                fontWeight = FontWeight.Bold
-            )
+            modifier = Modifier.weight(0.1f),
+            textAlign = TextAlign.End,
+            style = MaterialTheme.typography.labelSmall
         )
     }
 }
 
 @Composable
-private fun ItemPokemonSmallImages(images: List<String?>, modifier: Modifier = Modifier) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.Center) {
-        images.forEach { item ->
-            Spacer(modifier = Modifier.width(8.dp))
-            AsyncImage(
-                modifier = Modifier
-                    .size(50.dp)
-                    .clip(RoundedCornerShape(8.dp)),
-                model = ImageRequest.Builder(LocalContext.current).data(item)
-                    .crossfade(true)
-                    .scale(Scale.FILL)
-                    .precision(Precision.EXACT)
-                    .build(),
-                placeholder = painterResource(id = R.drawable.placeholder_image),
-                error = painterResource(id = R.drawable.ic_no_data),
-                contentDescription = stringResource(R.string.pokemon_image),
-                contentScale = ContentScale.Crop
-            )
+private fun ItemPokemonMainImages(
+    imageUrl: String,
+    onFetchImage: (Image) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AsyncImage(
+        modifier = modifier,
+        model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
+            .crossfade(true)
+            .allowHardware(false) // for palette library
+            .build(),
+        placeholder = painterResource(id = R.drawable.placeholder_image),
+        error = painterResource(id = R.drawable.ic_no_data),
+        contentDescription = stringResource(R.string.pokemon_image),
+        onSuccess = { success ->
+            // image for palette library
+            onFetchImage(success.result.image)
         }
-    }
+    )
 }

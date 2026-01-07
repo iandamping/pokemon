@@ -9,7 +9,7 @@ object PreviewData {
         pokemonName = "Bulbasaur",
         pokemonWeight = 69,
         pokemonHeight = 7,
-        pokemonImage = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
+        pokemonImage = "",
         pokemonAbilities = listOf("Overgrow", "Chlorophyll"),
         pokemonSmallImages = listOf(
             "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png",

@@ -90,6 +90,8 @@ dependencies {
     detektPlugins(libs.detekt.rules.compose)
     //lottie
     implementation(libs.lottie.compose)
+    //color palette
+    implementation(libs.androidx.palette.ktx)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)

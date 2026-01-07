@@ -9,14 +9,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import coil3.Image
 import com.junemon.pokemon.core.data.repository.model.PokemonDetail
 import com.junemon.pokemon.ui.state.ApiStates
 import com.junemon.pokemon.ui.state.UiState
 
 @Composable
-fun HomeScreen(uiState: UiState<List<PokemonDetail>>, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    uiState: UiState<List<PokemonDetail>>,
+    dynamicCardColor: Map<Int, Color>,
+    onProcessImageWithId: (Int, Image) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val context: Context = LocalContext.current
 
     LazyColumn(
@@ -40,7 +47,12 @@ fun HomeScreen(uiState: UiState<List<PokemonDetail>>, modifier: Modifier = Modif
 
             ApiStates.SUCCESS -> {
                 items(uiState.data!!, key = { key -> key.pokemonId }) { pokemon ->
-                    ItemPokemonScreen(data = pokemon) { }
+                    ItemPokemonScreen(
+                        data = pokemon,
+                        dynamicCardColor = dynamicCardColor,
+                        onSelectedPokemon = {},
+                        onProcessImageWithId = onProcessImageWithId
+                    )
                 }
             }
 
