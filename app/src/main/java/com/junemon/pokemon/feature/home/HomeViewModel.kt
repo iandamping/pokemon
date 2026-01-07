@@ -9,11 +9,12 @@ import coil3.toBitmap
 import com.junemon.pokemon.core.data.repository.DomainResult
 import com.junemon.pokemon.core.data.repository.PokemonRepository
 import com.junemon.pokemon.core.data.repository.model.PokemonDetail
+import com.junemon.pokemon.core.di.IoDispatcher
 import com.junemon.pokemon.ui.state.ApiStates
 import com.junemon.pokemon.ui.state.UiState
 import com.junemon.pokemon.util.PokemonColorCache
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +24,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val repository: PokemonRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val repository: PokemonRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : ViewModel() {
 
     private val _pokemonDetails: MutableStateFlow<UiState<List<PokemonDetail>>> = MutableStateFlow(
         UiState.initialize()
@@ -65,7 +69,7 @@ class HomeViewModel @Inject constructor(private val repository: PokemonRepositor
     }
 
     private suspend fun extractColorFromImage(pokemonId: String, image: Image): Color =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             // 1. Used cache color first from LruCache if exist
             PokemonColorCache.get(pokemonId)
                 ?.let { cachedColor -> return@withContext cachedColor }

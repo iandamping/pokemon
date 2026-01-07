@@ -19,5 +19,3 @@ data class PokemonDetail(
 )
 
 data class PokemonStat(val point: Int, val name: String)
-
-data class PokemonSmallImage(val image: String)
