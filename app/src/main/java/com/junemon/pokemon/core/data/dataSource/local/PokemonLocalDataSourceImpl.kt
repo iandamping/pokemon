@@ -11,13 +11,11 @@ class PokemonLocalDataSourceImpl @Inject constructor(
     private val dataStoreHelper: DataStoreHelper
 ) :
     PokemonLocalDataSource {
-    private val last_pokemon_sync = "sync pokemon"
     override fun getDBCount(): Flow<Int> {
         return pokemonDao.getCount()
     }
 
     override fun load(): Flow<List<PokemonEntity>> {
-        val s = System.currentTimeMillis()
         return pokemonDao.load()
     }
 

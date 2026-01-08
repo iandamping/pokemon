@@ -50,6 +50,5 @@ fun HomeScreen(
             is DomainResult.Error -> item { Text(uiState.message) }
             DomainResult.Loading -> item { Text("Loading") }
         }
-
     }
 }

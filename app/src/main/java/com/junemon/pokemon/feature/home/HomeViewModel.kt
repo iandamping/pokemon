@@ -36,7 +36,6 @@ class HomeViewModel @Inject constructor(
             initialValue = DomainResult.Loading
         )
 
-
     private val _pokemonColors = MutableStateFlow<Map<Int, Color>>(emptyMap())
     val pokemonColors = _pokemonColors.asStateFlow()
 

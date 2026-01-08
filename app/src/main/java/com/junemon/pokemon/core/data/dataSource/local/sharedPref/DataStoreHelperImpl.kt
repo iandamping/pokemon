@@ -11,19 +11,18 @@ import javax.inject.Inject
 class DataStoreHelperImpl @Inject constructor(private val dataStore: DataStore<Preferences>) :
     DataStoreHelper {
 
-    private val LAST_UPDATE_NAME = "last update data"
-    private val LAST_UPDATE_KEY = longPreferencesKey(LAST_UPDATE_NAME)
+    private val lastUpdateName = "last update data"
+    private val lastUpdateKey = longPreferencesKey(lastUpdateName)
 
     override suspend fun saveLongInDataStore(
         value: Long
     ) {
         dataStore.edit { preferences ->
-            preferences[LAST_UPDATE_KEY] = value
+            preferences[lastUpdateKey] = value
         }
     }
 
     override fun getLongInDataStore(): Flow<Long> {
-        return dataStore.data.map { preferences -> preferences[LAST_UPDATE_KEY] ?: 0 }
+        return dataStore.data.map { preferences -> preferences[lastUpdateKey] ?: 0 }
     }
-
 }

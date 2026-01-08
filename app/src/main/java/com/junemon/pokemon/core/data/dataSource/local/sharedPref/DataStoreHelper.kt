@@ -7,5 +7,4 @@ interface DataStoreHelper {
     suspend fun saveLongInDataStore(value: Long)
 
     fun getLongInDataStore(): Flow<Long>
-
 }
