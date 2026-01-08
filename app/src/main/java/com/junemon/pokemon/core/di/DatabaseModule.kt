@@ -2,8 +2,8 @@ package com.junemon.pokemon.core.di
 
 import android.content.Context
 import androidx.room.Room
-import com.junemon.pokemon.core.data.dataSource.local.PokemonDao
-import com.junemon.pokemon.core.data.dataSource.local.PokemonDatabase
+import com.junemon.pokemon.core.data.dataSource.local.database.PokemonDao
+import com.junemon.pokemon.core.data.dataSource.local.database.PokemonDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

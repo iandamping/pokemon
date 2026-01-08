@@ -1,4 +1,4 @@
-package com.junemon.pokemon.core.data.dataSource.local
+package com.junemon.pokemon.core.data.dataSource.local.database
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.Flow
  */
 @Dao
 interface PokemonDao {
+    @Query("SELECT COUNT(*) FROM main_pokemon")
+    fun getCount(): Flow<Int>
+
     @Query("SELECT * FROM main_pokemon")
     fun load(): Flow<List<PokemonEntity>>
 

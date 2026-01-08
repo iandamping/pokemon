@@ -1,4 +1,4 @@
-package com.junemon.pokemon.core.data.dataSource.local
+package com.junemon.pokemon.core.data.dataSource.local.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -18,7 +18,7 @@ data class PokemonEntity(
     @ColumnInfo(name = "pokemon_height") val pokemonHeight: Int,
     @ColumnInfo(name = "pokemon_image") val pokemonImage: String,
     @ColumnInfo(name = "pokemon_ability1") val pokemonAbility1: String,
-    @ColumnInfo(name = "pokemon_ability2") val pokemonAbility2: String?,
+    @ColumnInfo(name = "pokemon_ability2") val pokemonAbility2: String,
     @ColumnInfo(name = "pokemon_small_image1") val pokemonSmallImage1: String,
     @ColumnInfo(name = "pokemon_small_image2") val pokemonSmallImage2: String,
     @ColumnInfo(name = "pokemon_small_image3") val pokemonSmallImage3: String,
@@ -36,6 +36,6 @@ data class PokemonEntity(
     @ColumnInfo(name = "pokemon_stat_name5") val pokemonStatName5: String,
     @ColumnInfo(name = "pokemon_stat_point5") val pokemonStatPoint5: Int,
     @ColumnInfo(name = "pokemon_type0") val pokemonType0: String,
-    @ColumnInfo(name = "pokemon_type1") val pokemonType1: String?,
+    @ColumnInfo(name = "pokemon_type1") val pokemonType1: String,
     @ColumnInfo(name = "pokemon_species_url") val pokemonSpeciesUrl: String
 )

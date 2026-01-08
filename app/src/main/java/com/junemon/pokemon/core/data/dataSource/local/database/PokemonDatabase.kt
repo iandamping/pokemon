@@ -1,4 +1,4 @@
-package com.junemon.pokemon.core.data.dataSource.local
+package com.junemon.pokemon.core.data.dataSource.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
