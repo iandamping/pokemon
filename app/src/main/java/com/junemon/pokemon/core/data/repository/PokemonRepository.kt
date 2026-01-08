@@ -2,10 +2,13 @@ package com.junemon.pokemon.core.data.repository
 
 import com.junemon.pokemon.core.data.repository.model.PokemonDetail
 import com.junemon.pokemon.core.data.repository.model.PokemonDetailSpecies
+import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepository {
 
-    suspend fun getPokemon(): DomainResult<List<PokemonDetail>>
+    fun getPokemon(): Flow<DomainResult<List<PokemonDetail>>>
+
+    suspend fun refreshPokemon()
 
     suspend fun getEvolvingPokemon(url: String): DomainResult<PokemonDetail>
 

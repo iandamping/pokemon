@@ -11,7 +11,7 @@ import com.junemon.pokemon.util.PokemonConstant.ONE_SKILL_MONS
 import com.junemon.pokemon.util.PokemonConstant.ONE_TYPE_MONS
 import java.util.Locale
 
-fun PokemonDetailResponse.mapToDetail(): PokemonDetail = PokemonDetail(
+fun PokemonDetailResponse.toExternalModel(): PokemonDetail = PokemonDetail(
     pokemonId = pokemonId ?: 0,
     pokemonWeight = pokemonWeight ?: 0,
     pokemonHeight = pokemonHeight ?: 0,
@@ -32,12 +32,12 @@ fun PokemonDetailResponse.mapToDetail(): PokemonDetail = PokemonDetail(
         pokemonImage?.smallImage4
     ),
     pokemonStats = listOf(
-        pokemonStats[0].mapToDetail(),
-        pokemonStats[1].mapToDetail(),
-        pokemonStats[2].mapToDetail(),
-        pokemonStats[3].mapToDetail(),
-        pokemonStats[4].mapToDetail(),
-        pokemonStats[5].mapToDetail(),
+        pokemonStats[0].toExternalModel(),
+        pokemonStats[1].toExternalModel(),
+        pokemonStats[2].toExternalModel(),
+        pokemonStats[3].toExternalModel(),
+        pokemonStats[4].toExternalModel(),
+        pokemonStats[5].toExternalModel(),
     ),
     pokemonTypes = listOf(
         pokemonTypes[0].type.typeName.replaceFirstChar { firstChar ->
@@ -49,7 +49,7 @@ fun PokemonDetailResponse.mapToDetail(): PokemonDetail = PokemonDetail(
                 firstChar.toString()
             }
         },
-        pokemonTypes.checkTypeList(1, 1)
+        pokemonTypes.checkTypes(1, 1)
     ),
     pokemonAbilities = listOf(
         pokemonAbilities[0].abilities.abilityName.replaceFirstChar { firstChar ->
@@ -61,12 +61,12 @@ fun PokemonDetailResponse.mapToDetail(): PokemonDetail = PokemonDetail(
                 firstChar.toString()
             }
         },
-        pokemonAbilities.checkAbilitiesList(1, 1)
+        pokemonAbilities.checkAbilities(1, 1)
     ),
     pokemonSpeciesUrl = pokemonSpecies?.speciesUrl ?: "No data available"
 )
 
-fun PokemonBasicStatsResponse.mapToDetail(): PokemonStat = PokemonStat(
+fun PokemonBasicStatsResponse.toExternalModel(): PokemonStat = PokemonStat(
     baseStat,
     statName.name.replaceFirstChar { firstChar ->
         if (firstChar.isLowerCase()) {
@@ -79,7 +79,22 @@ fun PokemonBasicStatsResponse.mapToDetail(): PokemonStat = PokemonStat(
     }
 )
 
-fun List<PokemonTypesResponse>.checkTypeList(size: Int, position: Int): String =
+fun PokemonSpeciesDetailResponse.toExternalModel(): PokemonDetailSpecies = PokemonDetailSpecies(
+    happiness = pokemonHappiness ?: 0,
+    captureRate = pokemonCaptureRate ?: 0,
+    color = pokemonColor?.pokemonColor ?: "No data available",
+    eggGroup1 = pokemonEggGroup[0].eggName,
+    eggGroup2 = pokemonEggGroup.checkEggGroups(1, 1),
+    generation = pokemonGeneration?.pokemonGenerationLString ?: "No data available",
+    growthRate = pokemonGrowthRate?.pokemonGrowthRate ?: "No data available",
+    habitat = pokemonHabitat?.pokemonHabitat ?: "No data available",
+    shape = pokemonShape?.pokemonShape ?: "No data available",
+    pokemonEggGroup = pokemonEggGroup.first().eggName,
+    pokemonEggGroupUrl = pokemonEggGroup.first().url,
+    pokemonEvolutionUrl = pokemonEvolution?.url ?: "No data available"
+)
+
+fun List<PokemonTypesResponse>.checkTypes(size: Int, position: Int): String =
     if (this.size > size) {
         this[position].type.typeName.replaceFirstChar { firstChar ->
             if (firstChar.isLowerCase()) {
@@ -94,7 +109,7 @@ fun List<PokemonTypesResponse>.checkTypeList(size: Int, position: Int): String =
         ONE_TYPE_MONS
     }
 
-fun List<PokemonAbilitiesResponse>.checkAbilitiesList(size: Int, position: Int): String =
+fun List<PokemonAbilitiesResponse>.checkAbilities(size: Int, position: Int): String =
     if (this.size > size) {
         this[position].abilities.abilityName.replaceFirstChar { firstChar ->
             if (firstChar.isLowerCase()) {
@@ -109,22 +124,7 @@ fun List<PokemonAbilitiesResponse>.checkAbilitiesList(size: Int, position: Int):
         ONE_SKILL_MONS
     }
 
-fun PokemonSpeciesDetailResponse.mapToSpeciesDetail(): PokemonDetailSpecies = PokemonDetailSpecies(
-    happiness = pokemonHappiness ?: 0,
-    captureRate = pokemonCaptureRate ?: 0,
-    color = pokemonColor?.pokemonColor ?: "No data available",
-    eggGroup1 = pokemonEggGroup[0].eggName,
-    eggGroup2 = pokemonEggGroup.checkEggGroupList(1, 1),
-    generation = pokemonGeneration?.pokemonGenerationLString ?: "No data available",
-    growthRate = pokemonGrowthRate?.pokemonGrowthRate ?: "No data available",
-    habitat = pokemonHabitat?.pokemonHabitat ?: "No data available",
-    shape = pokemonShape?.pokemonShape ?: "No data available",
-    pokemonEggGroup = pokemonEggGroup.first().eggName,
-    pokemonEggGroupUrl = pokemonEggGroup.first().url,
-    pokemonEvolutionUrl = pokemonEvolution?.url ?: "No data available"
-)
-
-fun List<PokemonSpeciesEggGroupResponse>.checkEggGroupList(size: Int, position: Int): String =
+fun List<PokemonSpeciesEggGroupResponse>.checkEggGroups(size: Int, position: Int): String =
     if (this.size > size) {
         this[position].eggName
     } else {
