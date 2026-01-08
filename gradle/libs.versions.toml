@@ -1,6 +1,7 @@
 [versions]
 agp = "8.9.1"
 constraintlayoutCompose = "1.1.1"
+datastorePreferences = "1.2.0"
 detekt = "0.4.4"
 detektRulesCompose = "1.4.0"
 hiltAndroid = "2.57.1"
@@ -31,6 +32,8 @@ uiTextGoogleFonts = "1.10.0"
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferences" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }

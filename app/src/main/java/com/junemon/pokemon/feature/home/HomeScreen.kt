@@ -13,13 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil3.Image
+import com.junemon.pokemon.core.data.repository.DomainResult
 import com.junemon.pokemon.core.data.repository.model.PokemonDetail
-import com.junemon.pokemon.ui.state.ApiStates
-import com.junemon.pokemon.ui.state.UiState
 
 @Composable
 fun HomeScreen(
-    uiState: UiState<List<PokemonDetail>>,
+    uiState: DomainResult<List<PokemonDetail>>,
     dynamicCardColor: Map<Int, Color>,
     onProcessImageWithId: (Int, Image) -> Unit,
     modifier: Modifier = Modifier
@@ -36,17 +35,9 @@ fun HomeScreen(
                 Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show()
             }
         }
-        when (uiState.apiState) {
-            ApiStates.IDLE -> {
-                item { Text("Idle") }
-            }
-
-            ApiStates.LOADING -> {
-                item { Text("Loading") }
-            }
-
-            ApiStates.SUCCESS -> {
-                items(uiState.data!!, key = { key -> key.pokemonId }) { pokemon ->
+        when (uiState) {
+            is DomainResult.Data<List<PokemonDetail>> -> {
+                items(uiState.data, key = { key -> key.pokemonId }) { pokemon ->
                     ItemPokemonScreen(
                         data = pokemon,
                         dynamicCardColor = dynamicCardColor,
@@ -56,9 +47,8 @@ fun HomeScreen(
                 }
             }
 
-            ApiStates.FAILED -> {
-                item { Text(uiState.errorMessage) }
-            }
+            is DomainResult.Error -> item { Text(uiState.message) }
+            DomainResult.Loading -> item { Text("Loading") }
         }
     }
 }

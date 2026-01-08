@@ -10,8 +10,7 @@ import com.junemon.pokemon.core.data.dataSource.remote.response.ItemPokemonEggRe
 import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonResultsResponse
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.NetworkConstant.DEFAULT_ERROR
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.NetworkConstant.EMPTY_DATA
-import com.junemon.pokemon.core.data.repository.model.mapToDetail
-import com.junemon.pokemon.core.data.repository.model.mapToSpeciesDetail
+import com.junemon.pokemon.core.data.repository.model.toExternalModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -45,19 +44,19 @@ class PokemonRepositoryImplTest {
         coVerify(exactly = 6) { remoteData.getDetailPokemon(any()) }
 
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonId,
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonId,
             (results as DomainResult.Data).data[0].pokemonId
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonName,
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonName,
             results.data[0].pokemonName
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonHeight,
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonHeight,
             results.data[0].pokemonHeight
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonWeight,
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonWeight,
             results.data[0].pokemonWeight
         )
     }
@@ -204,19 +203,19 @@ class PokemonRepositoryImplTest {
         coVerify(exactly = 1) { remoteData.getDetailSpeciesPokemon(any()) }
 
         Assert.assertEquals(
-            DUMMY_POKEMON_SPECIES_DETAIL.mapToSpeciesDetail().captureRate,
+            DUMMY_POKEMON_SPECIES_DETAIL.toExternalModel().captureRate,
             (results as DomainResult.Data).data.captureRate
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_SPECIES_DETAIL.mapToSpeciesDetail().color,
+            DUMMY_POKEMON_SPECIES_DETAIL.toExternalModel().color,
             results.data.color
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_SPECIES_DETAIL.mapToSpeciesDetail().eggGroup1,
+            DUMMY_POKEMON_SPECIES_DETAIL.toExternalModel().eggGroup1,
             results.data.eggGroup1
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_SPECIES_DETAIL.mapToSpeciesDetail().eggGroup2,
+            DUMMY_POKEMON_SPECIES_DETAIL.toExternalModel().eggGroup2,
             results.data.eggGroup2
         )
     }
@@ -272,18 +271,24 @@ class PokemonRepositoryImplTest {
 
         coVerify(exactly = 1) { remoteData.getPokemonById(any()) }
 
-        Assert.assertEquals(DUMMY_POKEMON_DETAIL.mapToDetail(), (results as DomainResult.Data).data)
-        Assert.assertEquals(DUMMY_POKEMON_DETAIL.mapToDetail().pokemonId, results.data.pokemonId)
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonWeight,
+            DUMMY_POKEMON_DETAIL.toExternalModel(),
+            (results as DomainResult.Data).data
+        )
+        Assert.assertEquals(
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonId,
+            results.data.pokemonId
+        )
+        Assert.assertEquals(
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonWeight,
             results.data.pokemonWeight
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonHeight,
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonHeight,
             results.data.pokemonHeight
         )
         Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.mapToDetail().pokemonName,
+            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonName,
             results.data.pokemonName
         )
     }

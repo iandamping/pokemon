@@ -88,8 +88,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     //detekt additional rules
     detektPlugins(libs.detekt.rules.compose)
-    //lottie
-    implementation(libs.lottie.compose)
+    //datastore
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.datastore.preferences)
     //color palette
     implementation(libs.androidx.palette.ktx)
     testImplementation(libs.junit)
