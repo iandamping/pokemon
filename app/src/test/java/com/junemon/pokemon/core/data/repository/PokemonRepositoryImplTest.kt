@@ -1,5 +1,8 @@
 package com.junemon.pokemon.core.data.repository
 
+import app.cash.turbine.test
+import com.junemon.pokemon.core.data.dataSource.local.FakePokemonLocalDataSource
+import com.junemon.pokemon.core.data.dataSource.local.PokemonLocalDataSource
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_POKEMON_DETAIL
 import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_POKEMON_MAIN_RESPONSE
@@ -7,9 +10,9 @@ import com.junemon.pokemon.core.data.dataSource.remote.DummyPokemon.DUMMY_POKEMO
 import com.junemon.pokemon.core.data.dataSource.remote.PokemonRemoteDataSource
 import com.junemon.pokemon.core.data.dataSource.remote.response.DataSourceResult
 import com.junemon.pokemon.core.data.dataSource.remote.response.ItemPokemonEggResponse
-import com.junemon.pokemon.core.data.dataSource.remote.response.PokemonResultsResponse
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.NetworkConstant.DEFAULT_ERROR
 import com.junemon.pokemon.core.data.dataSource.remote.retrofit.NetworkConstant.EMPTY_DATA
+import com.junemon.pokemon.core.data.repository.model.toEntity
 import com.junemon.pokemon.core.data.repository.model.toExternalModel
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -26,74 +29,96 @@ import java.io.IOException
 class PokemonRepositoryImplTest {
 
     private val remoteData: PokemonRemoteDataSource = mockk()
+    private val localData: PokemonLocalDataSource = FakePokemonLocalDataSource()
     private lateinit var sut: PokemonRepository
 
     @Before
     fun setUp() {
-        sut = PokemonRepositoryImpl(ioDispatcher = UnconfinedTestDispatcher(), remoteData)
+        sut =
+            PokemonRepositoryImpl(ioDispatcher = UnconfinedTestDispatcher(), remoteData, localData)
     }
 
     @Test
-    fun `GetPokemon should return success`() = runTest {
-        coEvery { remoteData.getPokemon() } returns DataSourceResult.Data(DUMMY_POKEMON_MAIN_RESPONSE.pokemonResults)
+    fun `GetPokemon should return DomainResult Loading because local data is empty`() = runTest {
+        val results = sut.getPokemon()
+
+        results.test {
+            Assert.assertEquals(DomainResult.Loading, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `GetPokemon should return DomainResult Data because local data is exist`() = runTest {
+        localData.insertPokemon(listOf(DUMMY_POKEMON_DETAIL.toEntity()))
+        val results = sut.getPokemon()
+
+        results.test {
+            Assert.assertEquals(
+                listOf(DUMMY_POKEMON_DETAIL.toExternalModel()),
+                (awaitItem() as DomainResult.Data).data
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `refreshPokemon should trigger insert data in DB`() = runTest {
+        coEvery { remoteData.getPokemon() } returns DataSourceResult.Data(
+            DUMMY_POKEMON_MAIN_RESPONSE.pokemonResults
+        )
         coEvery { remoteData.getDetailPokemon(any()) } returns DUMMY_POKEMON_DETAIL
 
-        val results = sut.getPokemon()
+        sut.refreshPokemon()
 
         coVerify(exactly = 1) { remoteData.getPokemon() }
         coVerify(exactly = 6) { remoteData.getDetailPokemon(any()) }
 
-        Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonId,
-            (results as DomainResult.Data).data[0].pokemonId
-        )
-        Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonName,
-            results.data[0].pokemonName
-        )
-        Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonHeight,
-            results.data[0].pokemonHeight
-        )
-        Assert.assertEquals(
-            DUMMY_POKEMON_DETAIL.toExternalModel().pokemonWeight,
-            results.data[0].pokemonWeight
-        )
+        localData.loadPokemon().test {
+            Assert.assertEquals(
+                DUMMY_POKEMON_DETAIL.toEntity(),
+                awaitItem().first()
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
-    fun `GetPokemon should return error from empty data`() = runTest {
-        coEvery { remoteData.getPokemon() } returns DataSourceResult.Data<List<PokemonResultsResponse>>(
-            emptyList()
-        )
+    fun `refreshPokemon should not trigger insert data in DB because empty data from remote`() =
+        runTest {
+            coEvery { remoteData.getPokemon() } returns DataSourceResult.Data(emptyList())
 
-        val results = sut.getPokemon()
+            sut.refreshPokemon()
 
-        coVerify(exactly = 1) { remoteData.getPokemon() }
-        coVerify(exactly = 0) { remoteData.getDetailPokemon(any()) }
+            coVerify(exactly = 1) { remoteData.getPokemon() }
+            coVerify(exactly = 0) { remoteData.getDetailPokemon(any()) }
 
-        Assert.assertEquals(
-            EMPTY_DATA,
-            (results as DomainResult.Error).message
-        )
-    }
+            localData.getDBCount().test {
+                Assert.assertEquals(
+                    0,
+                    awaitItem()
+                )
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
 
     @Test
-    fun `GetPokemon should return error from exception`() = runTest {
-        coEvery { remoteData.getPokemon() } returns DataSourceResult.Data<List<PokemonResultsResponse>>(
-            emptyList()
-        )
-        coEvery { remoteData.getDetailPokemon(any()) } throws IOException()
+    fun `refreshPokemon should not trigger insert data in DB`() = runTest {
+        localData.setLastUpdate(System.currentTimeMillis())
+        localData.insertPokemon(listOf(DUMMY_POKEMON_DETAIL.toEntity()))
 
-        val results = sut.getPokemon()
+        sut.refreshPokemon()
 
-        coVerify(exactly = 1) { remoteData.getPokemon() }
+        coVerify(exactly = 0) { remoteData.getPokemon() }
         coVerify(exactly = 0) { remoteData.getDetailPokemon(any()) }
 
-        Assert.assertEquals(
-            EMPTY_DATA,
-            (results as DomainResult.Error).message
-        )
+        localData.loadPokemon().test {
+            Assert.assertEquals(
+                listOf(DUMMY_POKEMON_DETAIL.toEntity()),
+                awaitItem()
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
