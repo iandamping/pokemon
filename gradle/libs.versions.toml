@@ -27,6 +27,7 @@ moshiKotlin = "1.15.2"
 converterMoshiVersion = "2.9.0"
 retrofit = "3.0.0"
 coilCompose = "3.0.0"
+turbine = "1.2.1"
 uiTextGoogleFonts = "1.10.0"
 
 [libraries]
@@ -73,6 +74,7 @@ moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "mosh
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshiVersion" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

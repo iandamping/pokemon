@@ -35,7 +35,7 @@ class PokemonRepositoryImpl @Inject constructor(
     private val databaseTimeout = 24.hours.inWholeMilliseconds
 
     override fun getPokemon(): Flow<DomainResult<List<PokemonDetail>>> {
-        return localData.load().map { entities ->
+        return localData.loadPokemon().map { entities ->
             if (entities.isEmpty()) {
                 DomainResult.Loading
             } else {
@@ -70,7 +70,7 @@ class PokemonRepositoryImpl @Inject constructor(
                         DomainResult.Error(EMPTY_DATA)
                     } else {
                         localData.setLastUpdate(System.currentTimeMillis())
-                        localData.insert(data.map { remoteData -> remoteData.toEntity() })
+                        localData.insertPokemon(data.map { remoteData -> remoteData.toEntity() })
                     }
                 }
             }

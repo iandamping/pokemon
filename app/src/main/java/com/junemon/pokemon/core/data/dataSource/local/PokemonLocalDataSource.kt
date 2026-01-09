@@ -7,11 +7,11 @@ interface PokemonLocalDataSource {
 
     fun getDBCount(): Flow<Int>
 
-    fun load(): Flow<List<PokemonEntity>>
+    fun loadPokemon(): Flow<List<PokemonEntity>>
 
-    suspend fun insert(data: List<PokemonEntity>)
+    suspend fun insertPokemon(data: List<PokemonEntity>)
 
-    suspend fun deleteAllData()
+    suspend fun deletePokemonData()
 
     suspend fun setLastUpdate(time: Long)
 

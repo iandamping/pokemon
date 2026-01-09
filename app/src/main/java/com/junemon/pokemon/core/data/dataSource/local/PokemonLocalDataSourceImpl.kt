@@ -15,15 +15,15 @@ class PokemonLocalDataSourceImpl @Inject constructor(
         return pokemonDao.getCount()
     }
 
-    override fun load(): Flow<List<PokemonEntity>> {
+    override fun loadPokemon(): Flow<List<PokemonEntity>> {
         return pokemonDao.load()
     }
 
-    override suspend fun insert(data: List<PokemonEntity>) {
+    override suspend fun insertPokemon(data: List<PokemonEntity>) {
         pokemonDao.insert(data)
     }
 
-    override suspend fun deleteAllData() {
+    override suspend fun deletePokemonData() {
         pokemonDao.deleteAllData()
     }
 

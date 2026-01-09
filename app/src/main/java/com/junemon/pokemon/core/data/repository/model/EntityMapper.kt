@@ -76,8 +76,7 @@ fun PokemonEntity.toExternalModel(): PokemonDetail = PokemonDetail(
         PokemonStat(pokemonStatPoint3, pokemonStatName3),
         PokemonStat(pokemonStatPoint4, pokemonStatName4),
         PokemonStat(pokemonStatPoint5, pokemonStatName5),
-
-        ),
+    ),
     pokemonTypes = listOf(
         pokemonType0,
         pokemonType1
