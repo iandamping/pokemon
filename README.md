@@ -10,6 +10,7 @@ This repository is a modern Android development lab focused on implementing Decl
 * Networking: Retrofit with OkHTTP & Moshi.
 * Local Database: Room.
 * Unit-testing: Mockk.
+* Coroutine Flow Unit-Testing: Turbine
 
 ### Code Quality Assurance:
 * Detekt: Used for static code analysis to ensure compliance with Kotlin coding standards.
