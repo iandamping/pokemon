@@ -20,8 +20,9 @@ import com.junemon.pokemon.core.data.repository.model.PokemonDetail
 fun HomeScreen(
     uiState: DomainResult<List<PokemonDetail>>,
     dynamicCardColor: Map<Int, Color>,
+    modifier: Modifier = Modifier,
     onProcessImageWithId: (Int, Image) -> Unit,
-    modifier: Modifier = Modifier
+    onSelectedPokemon: (Int) -> Unit,
 ) {
     val context: Context = LocalContext.current
 
@@ -41,7 +42,9 @@ fun HomeScreen(
                     ItemPokemonScreen(
                         data = pokemon,
                         dynamicCardColor = dynamicCardColor,
-                        onSelectedPokemon = {},
+                        onSelectedPokemon = { pokemonId ->
+                            onSelectedPokemon(pokemonId)
+                        },
                         onProcessImageWithId = onProcessImageWithId
                     )
                 }
