@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 
 object PokemonColorCache {
     // Cache capacity: 50 item (adjust your needs)
-    private val colorCache = LruCache<String, Color>(50)
+    private val colorCache = LruCache<String, Color>(100)
 
     fun get(key: String): Color? = colorCache.get(key)
 
