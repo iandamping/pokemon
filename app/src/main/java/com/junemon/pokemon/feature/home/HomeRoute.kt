@@ -9,7 +9,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    onMoveToDetailScreen: (Int) -> Unit,
 ) {
     val pokemonDetails by homeViewModel.pokemonDetails.collectAsStateWithLifecycle()
     val pokemonColors by homeViewModel.pokemonColors.collectAsStateWithLifecycle()
@@ -19,6 +20,7 @@ fun HomeRoute(
         dynamicCardColor = pokemonColors,
         onProcessImageWithId = { pokemonId, image ->
             homeViewModel.updatePokemonColor(pokemonId = pokemonId, image = image)
-        }
+        },
+        onSelectedPokemon = onMoveToDetailScreen
     )
 }
