@@ -1,9 +1,8 @@
-package com.junemon.pokemon.feature.home
+package com.junemon.pokemon.feature.detail
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,22 +31,20 @@ import com.junemon.pokemon.feature.common.SharedPokemonTitle
 import com.junemon.pokemon.util.PokemonConstant.ONE_TYPE_MONS
 
 @Composable
-fun ItemPokemonScreen(
-    data: PokemonDetail,
+fun DetailScreen(
+    pokemonData: PokemonDetail,
     dynamicCardColor: Map<Int, Color>,
     sharedTransitionScope: SharedTransitionScope,
     animatedContentScope: AnimatedContentScope,
     modifier: Modifier = Modifier,
     onExtractColorFromImageWithId: (Int, Image) -> Unit,
-    onSelectedPokemon: (Int) -> Unit
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .clickable { onSelectedPokemon(data.pokemonId) },
+            .wrapContentHeight(),
         colors = CardDefaults.cardColors(
-            containerColor = dynamicCardColor[data.pokemonId]?.copy(alpha = 0.2f)
+            containerColor = dynamicCardColor[pokemonData.pokemonId]?.copy(alpha = 0.2f)
                 ?.compositeOver(Color.White)
                 ?: MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
                     .compositeOver(Color.White)
@@ -70,9 +67,9 @@ fun ItemPokemonScreen(
                     end.linkTo(parent.end, 8.dp)
                     width = Dimension.fillToConstraints
                 },
-                pokemonName = data.pokemonName,
-                pokemonStat = data.pokemonStats.first().name,
-                pokemonStatPoint = data.pokemonStats.first().point
+                pokemonName = pokemonData.pokemonName,
+                pokemonStat = pokemonData.pokemonStats.first().name,
+                pokemonStatPoint = pokemonData.pokemonStats.first().point
             )
 
             SharedPokemonAsyncImage(
@@ -81,14 +78,17 @@ fun ItemPokemonScreen(
                     start.linkTo(parent.start, 8.dp)
                     end.linkTo(parent.end, 8.dp)
                     width = Dimension.fillToConstraints
-                    height = Dimension.value(150.dp)
+                    height = Dimension.value(250.dp)
                 },
-                imageUrl = data.pokemonImage,
-                pokemonId = data.pokemonId,
+                imageUrl = pokemonData.pokemonImage,
+                pokemonId = pokemonData.pokemonId,
                 animatedContentScope = animatedContentScope,
                 sharedTransitionScope = sharedTransitionScope,
                 onFetchImage = { image ->
-                    onExtractColorFromImageWithId(data.pokemonId, image)
+                    onExtractColorFromImageWithId(
+                        pokemonData.pokemonId,
+                        image
+                    )
                 }
             )
 
@@ -111,7 +111,7 @@ fun ItemPokemonScreen(
                 },
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                data.pokemonTypes.forEach { type ->
+                pokemonData.pokemonTypes.forEach { type ->
                     if (type != ONE_TYPE_MONS) {
                         Row {
                             Text(type)
@@ -129,7 +129,7 @@ fun ItemPokemonScreen(
                 },
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
-                data.pokemonStats.forEachIndexed { index, stat ->
+                pokemonData.pokemonStats.forEachIndexed { index, stat ->
                     SharedPokemonStat(
                         modifier = Modifier.fillMaxWidth(),
                         statName = stat.name,
