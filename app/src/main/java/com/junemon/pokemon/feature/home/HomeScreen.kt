@@ -2,6 +2,8 @@ package com.junemon.pokemon.feature.home
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,8 +22,10 @@ import com.junemon.pokemon.core.data.repository.model.PokemonDetail
 fun HomeScreen(
     uiState: DomainResult<List<PokemonDetail>>,
     dynamicCardColor: Map<Int, Color>,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     modifier: Modifier = Modifier,
-    onProcessImageWithId: (Int, Image) -> Unit,
+    onExtractColorFromImageWithId: (Int, Image) -> Unit,
     onSelectedPokemon: (Int) -> Unit,
 ) {
     val context: Context = LocalContext.current
@@ -45,7 +49,9 @@ fun HomeScreen(
                         onSelectedPokemon = { pokemonId ->
                             onSelectedPokemon(pokemonId)
                         },
-                        onProcessImageWithId = onProcessImageWithId
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedContentScope = animatedContentScope,
+                        onExtractColorFromImageWithId = onExtractColorFromImageWithId
                     )
                 }
             }
