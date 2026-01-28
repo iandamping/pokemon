@@ -1,5 +1,6 @@
 package com.junemon.pokemon.navigation
 
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,19 +14,28 @@ fun PokemonNavigationHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
-    NavHost(
-        navController = navController,
-        startDestination = HomeScreen,
-        modifier = modifier
-    ) {
-        composable<HomeScreen> {
-            HomeRoute(onMoveToDetailScreen = { pokemonId ->
-                navController.navigate(DetailScreen(pokemonId = pokemonId))
-            })
-        }
+    SharedTransitionLayout {
+        NavHost(
+            navController = navController,
+            startDestination = NavigationScreen.HomeScreen,
+            modifier = modifier
+        ) {
+            composable<NavigationScreen.HomeScreen> {
+                HomeRoute(
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable,
+                    onMoveToDetailScreen = { pokemonId ->
+                        navController.navigate(NavigationScreen.DetailScreen(pokemonId = pokemonId))
+                    }
+                )
+            }
 
-        composable<DetailScreen> {
-            DetailRoute()
+            composable<NavigationScreen.DetailScreen> {
+                DetailRoute(
+                    sharedTransitionScope = this@SharedTransitionLayout,
+                    animatedContentScope = this@composable,
+                )
+            }
         }
     }
 }
