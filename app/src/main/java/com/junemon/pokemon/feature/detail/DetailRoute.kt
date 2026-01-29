@@ -23,13 +23,15 @@ fun DetailRoute(
     val pokemonDetail by detailViewModel.pokemonDetail.collectAsStateWithLifecycle()
     val pokemonCharacteristic by detailViewModel.pokemonCharacteristic.collectAsStateWithLifecycle()
     val pokemonAreas by detailViewModel.pokemonAreas.collectAsStateWithLifecycle()
-    val pokemonDetailArea by detailViewModel.pokemonDetailArea.collectAsStateWithLifecycle()
+    val pokemonDetailSpecies by detailViewModel.pokemonDetailSpecies.collectAsStateWithLifecycle()
     val pokemonColors by detailViewModel.pokemonColors.collectAsStateWithLifecycle()
 
     when (val pokemonData = pokemonDetail) {
         is DomainResult.Data<PokemonDetail> -> {
             DetailScreen(
                 pokemonData = pokemonData.data,
+                pokemonCharacteristic = pokemonCharacteristic,
+                pokemonSpecies = pokemonDetailSpecies,
                 dynamicCardColor = pokemonColors,
                 sharedTransitionScope = sharedTransitionScope,
                 animatedContentScope = animatedContentScope,

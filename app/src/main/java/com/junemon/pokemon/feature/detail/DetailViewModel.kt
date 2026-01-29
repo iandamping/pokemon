@@ -66,7 +66,7 @@ class DetailViewModel @Inject constructor(
             initialValue = DomainResult.Loading
         )
 
-    val pokemonDetailArea: StateFlow<DomainResult<PokemonDetailSpecies>> = pokemonId
+    val pokemonDetailSpecies: StateFlow<DomainResult<PokemonDetailSpecies>> = pokemonId
         .transformLatest { id ->
             emit(repository.getDetailSpeciesPokemon(id))
         }.stateIn(
