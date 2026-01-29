@@ -5,10 +5,15 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -19,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.Image
 import com.junemon.pokemon.core.data.repository.DomainResult
@@ -46,15 +52,21 @@ fun DetailScreen(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight(),
+        shape = RoundedCornerShape(28.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(
             containerColor = dynamicCardColor[pokemonData.pokemonId]?.copy(alpha = 0.2f)
                 ?.compositeOver(Color.White)
                 ?: MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f)
                     .compositeOver(Color.White)
         ),
-        elevation = CardDefaults.cardElevation(4.dp),
     ) {
-        Column(modifier = Modifier.padding(8.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             SharedPokemonTitle(
                 modifier = Modifier.fillMaxWidth(),
                 pokemonName = pokemonData.pokemonName,
@@ -104,27 +116,17 @@ fun DetailScreen(
                 }
             }
 
-            Column(
-                modifier = Modifier
-                    .wrapContentHeight(),
-                verticalArrangement = Arrangement.SpaceEvenly
-            ) {
-                pokemonData.pokemonStats.forEachIndexed { index, stat ->
-                    SharedPokemonStat(
-                        modifier = Modifier.fillMaxWidth(),
-                        statName = stat.name,
-                        statPoint = stat.point,
-                        selectedColor = progressIndicatorColors[index]
-                    )
-                }
-            }
+            PokemonStat(
+                modifier = Modifier.fillMaxWidth(),
+                pokemonData = pokemonData
+            )
 
             HorizontalDivider(
                 Modifier.fillMaxWidth(),
                 thickness = 1.5.dp
             )
 
-            ExtractPokemonCharacteristic(
+            PokemonCharacteristic(
                 modifier = Modifier.fillMaxWidth(),
                 pokemonCharacter = pokemonCharacteristic
             )
@@ -133,7 +135,8 @@ fun DetailScreen(
                 Modifier.fillMaxWidth(),
                 thickness = 1.5.dp
             )
-            ExtractPokemonSpecies(
+
+            PokemonMetaData(
                 modifier = Modifier.fillMaxWidth(),
                 pokemonSpecies = pokemonSpecies
             )
@@ -142,7 +145,79 @@ fun DetailScreen(
 }
 
 @Composable
-private fun ExtractPokemonCharacteristic(
+fun PokemonStat(pokemonData: PokemonDetail, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(
+            text = "Base Stat",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        pokemonData.pokemonStats.forEachIndexed { index, stat ->
+            SharedPokemonStat(
+                modifier = Modifier.fillMaxWidth(),
+                statName = stat.name,
+                statPoint = stat.point,
+                selectedColor = progressIndicatorColors[index]
+            )
+        }
+    }
+}
+
+@Composable
+fun PokemonMetaData(
+    pokemonSpecies: DomainResult<PokemonDetailSpecies>,
+    modifier: Modifier = Modifier
+) {
+    when (val species = pokemonSpecies) {
+        is DomainResult.Data<PokemonDetailSpecies> -> {
+            val items = listOf(
+                "Habitat" to species.data.habitat,
+                "Group" to species.data.pokemonEggGroup,
+                "Growth" to species.data.growthRate,
+                "Capture Rate" to "${species.data.captureRate}%"
+            )
+            // Menggunakan Column dan Row untuk mensimulasikan Grid sederhana
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                items.chunked(2).forEach { rowItems ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        rowItems.forEach { (label, value) ->
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    label,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = Color.Gray
+                                )
+                                Text(
+                                    value,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        is DomainResult.Error -> {
+            Row(modifier = modifier) {
+                Text("Species : Unknown")
+            }
+        }
+
+        DomainResult.Loading -> Text("loading")
+    }
+}
+
+@Composable
+private fun PokemonCharacteristic(
     pokemonCharacter: DomainResult<String>,
     modifier: Modifier = Modifier
 ) {
@@ -156,46 +231,6 @@ private fun ExtractPokemonCharacteristic(
         is DomainResult.Error -> {
             Row(modifier = modifier) {
                 Text("Character : Unknown")
-            }
-        }
-
-        DomainResult.Loading -> Text("loading")
-    }
-}
-
-@Composable
-private fun ExtractPokemonSpecies(
-    pokemonSpecies: DomainResult<PokemonDetailSpecies>,
-    modifier: Modifier = Modifier
-) {
-    when (val species = pokemonSpecies) {
-        is DomainResult.Data<PokemonDetailSpecies> -> {
-            Column {
-                Row(modifier = modifier) {
-                    Text("Generation : ${species.data.generation}")
-                }
-
-                Row(modifier = modifier) {
-                    Text("Growth Rate : ${species.data.growthRate}")
-                }
-
-                Row(modifier = modifier) {
-                    Text("Habitat : ${species.data.habitat}")
-                }
-
-                Row(modifier = modifier) {
-                    Text("Capture Rate : ${species.data.captureRate}")
-                }
-
-                Row(modifier = modifier) {
-                    Text("Pokemon Group : ${species.data.pokemonEggGroup}")
-                }
-            }
-        }
-
-        is DomainResult.Error -> {
-            Row(modifier = modifier) {
-                Text("Species : Unknown")
             }
         }
 
