@@ -32,15 +32,17 @@ class NetworkMapperTest {
         val result = customResponse.toExternalModel()
 
         Assert.assertEquals(
-            "Charmander", result.pokemonName
+            "Charmander",
+            result.pokemonName
         )
         Assert.assertEquals(
-            "Predator", result.pokemonTypes.first()
+            "Predator",
+            result.pokemonTypes.first()
         )
         Assert.assertEquals(
-            "Running", result.pokemonAbilities.first()
+            "Running",
+            result.pokemonAbilities.first()
         )
-
     }
 
     @Test
@@ -59,20 +61,22 @@ class NetworkMapperTest {
         val result = customResponse.toExternalModel()
 
         Assert.assertEquals(
-            "Charmander", result.pokemonName
+            "Charmander",
+            result.pokemonName
         )
         Assert.assertEquals(
-            "Predator", result.pokemonTypes.first()
+            "Predator",
+            result.pokemonTypes.first()
         )
         Assert.assertEquals(
-            "Running", result.pokemonAbilities.first()
+            "Running",
+            result.pokemonAbilities.first()
         )
-
     }
 
     @Test
     fun `NetworkMapper toExternalModel test with nullable data`() {
-        //given & when
+        // given & when
         val customResponse = PokemonDetailResponse(
             pokemonImage = null,
             pokemonStats = DUMMY_LIST_POKEMON_BASIC_STAT,
@@ -86,25 +90,30 @@ class NetworkMapperTest {
         )
         val result = customResponse.toExternalModel()
 
-        //then
+        // then
         Assert.assertEquals(
-            0, result.pokemonId
+            0,
+            result.pokemonId
         )
         Assert.assertEquals(
-            0, result.pokemonHeight
+            0,
+            result.pokemonHeight
         )
         Assert.assertEquals(
-            0, result.pokemonWeight
+            0,
+            result.pokemonWeight
         )
         Assert.assertEquals(
-            "No data available", result.pokemonName
+            "No data available",
+            result.pokemonName
         )
         Assert.assertEquals(
-            "No data available", result.pokemonImage
+            "No data available",
+            result.pokemonImage
         )
         Assert.assertEquals(
-            "No data available", result.pokemonSpeciesUrl
+            "No data available",
+            result.pokemonSpeciesUrl
         )
-
     }
 }
