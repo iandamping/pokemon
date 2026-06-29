@@ -7,6 +7,8 @@ plugins {
     id("dagger.hilt.android.plugin")
 }
 
+apply(from = "${rootProject.projectDir}/gradle/jacoco.gradle.kts")
+
 android {
     namespace = "com.junemon.pokemon"
     compileSdk = 36
@@ -21,7 +23,10 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("debug") {
+            enableUnitTestCoverage = true
+        }
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

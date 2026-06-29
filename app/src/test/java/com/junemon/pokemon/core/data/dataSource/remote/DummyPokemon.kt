@@ -87,15 +87,28 @@ object DummyPokemon {
         PokemonSpritesResponse(DUMMY_POKEMON_OTHER_SPRITE, "a", "a", "a", "a")
     val DUMMY_POKEMON_DETAIL =
         PokemonDetailResponse(
-            1,
-            "a",
-            1,
-            1,
-            DUMMY_POKEMON_SPRITE,
-            DUMMY_LIST_POKEMON_BASIC_STAT,
-            DUMMY_LIST_POKEMON_TYPE,
-            DUMMY_LIST_POKEMON_ABILITY,
-            DUMMY_POKEMON_SPECIAL_1
+            pokemonId = 1,
+            pokemonName = "a",
+            pokemonWeight = 1,
+            pokemonHeight = 1,
+            pokemonImage = DUMMY_POKEMON_SPRITE,
+            pokemonStats = DUMMY_LIST_POKEMON_BASIC_STAT,
+            pokemonTypes = DUMMY_LIST_POKEMON_TYPE,
+            pokemonAbilities = DUMMY_LIST_POKEMON_ABILITY,
+            pokemonSpecies = DUMMY_POKEMON_SPECIAL_1
+        )
+
+    val DUMMY_NULL_POKEMON_DETAIL =
+        PokemonDetailResponse(
+            pokemonImage = null,
+            pokemonStats = DUMMY_LIST_POKEMON_BASIC_STAT,
+            pokemonTypes = DUMMY_LIST_POKEMON_TYPE,
+            pokemonAbilities = DUMMY_LIST_POKEMON_ABILITY,
+            pokemonSpecies = DUMMY_POKEMON_SPECIAL_1,
+            pokemonId = null,
+            pokemonName = null,
+            pokemonWeight = null,
+            pokemonHeight = null
         )
     val DUMMY_ITEM_POKEMON_CHAR_1 = ItemPokemonCharacteristicResponse(
         "a",
